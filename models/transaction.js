@@ -4,7 +4,7 @@ const TransactionSchema = Schema({
 
     id: {
         type: Number,
-        required: true
+        required: false
     },
 
     accountFrom: {
@@ -24,7 +24,7 @@ const TransactionSchema = Schema({
 
     date: {
         type: Date,
-        required: true
+        required: false
     },
 
     description: {
@@ -34,14 +34,20 @@ const TransactionSchema = Schema({
 
     user_id: {
         type: Number,
-        required: true
+        required: false
     },
 
     status: {
         type: String,
-        required: true
+        required: false
     }
 
 });
 
-modele.exports = model('Transaction', TransactionSchema);
+TransactionSchema.method('toJSON', function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+});
+
+module.exports = model('Transaction', TransactionSchema);

@@ -13,4 +13,4 @@ const CurrencySchema = Schema({
     }
 });
 
-modele.exports = model('Currency', CurrencySchema);
+module.exports = model('Currency', CurrencySchema);
