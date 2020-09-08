@@ -11,6 +11,9 @@ const app = express();
 //Configurar CORS
 app.use(cors());
 
+//lectura y parseo del body
+app.use( express.json() )
+
 //Data Base
 dbConnection();
 
@@ -21,12 +24,8 @@ dbConnection();
 console.log(process.env.PORT);
 
 //Rutas
-app.get('/', (req, res) => {
-
-    res.json({
-        ok:true
-    })
-});
+app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/transfer', require('./routes/transactions'));
 
 
 app.listen( process.env.PORT, () => {
