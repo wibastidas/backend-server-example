@@ -1,18 +1,15 @@
 /*
-    Route: /api/users
+    Route: /api/login
 */
 
 const { Router } = require('express');
-const { check } = require('express-validator');
+const { login } = require('../controllers/auth');
 const { validateFields } = require('../middlewares/ validate-fields')
-
-const { createUser, getUsers } = require('../controllers/users')
-
+const { check } = require('express-validator');
 
 const router = Router();
 
 
-router.get('/', getUsers);
 router.post('/',
     [
         check('name', ' Name required').not().isEmpty(),
@@ -20,9 +17,7 @@ router.post('/',
         check('email', ' Email required').isEmail(),
         validateFields
     ], 
-    createUser
+    login
 );
-
-
 
 module.exports = router;

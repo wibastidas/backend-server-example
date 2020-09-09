@@ -28,6 +28,7 @@ app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/transfer', require('./routes/transactions'));
 app.use('/api/currencies', require('./routes/currencies'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/login', require('./routes/auth'));
 app.use('/api/accounts', require('./routes/accounts'));
 
 
