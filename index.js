@@ -27,6 +27,11 @@ console.log(process.env.PORT);
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/transfer', require('./routes/transactions'));
 
+//otras
+app.use('/api/currencies', require('./routes/currencies'));
+// app.use('/api/accounts', require('./routes/accounts'));
+// app.use('/api/users', require('./routes/users'));
+
 
 app.listen( process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto ' + process.env.PORT);

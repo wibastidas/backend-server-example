@@ -2,19 +2,14 @@
 const { response } = require('express');
 
 const Transaction = require('../models/transaction');
-const Currency = require('../models/currency');
 
 const getTransactions = async(req, res) => {
 
-
     const transactions = await Transaction.find({}, 'accountFrom accountTo amount date description');
-    const currency = await Currency.find({}, 'name code');
-
 
     res.json({
         ok:true,
-        transactions,
-        currency
+        transactions
     })
 }
 

@@ -2,9 +2,9 @@ const { Schema, model } = require('mongoose');
 
 const CurrencySchema = Schema({
 
-    _id: {
+    id: {
         type: Number,
-        required: true
+        required: false
     },
 
     name: {
@@ -14,7 +14,8 @@ const CurrencySchema = Schema({
 
     code: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 });
 
