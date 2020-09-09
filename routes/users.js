@@ -16,6 +16,7 @@ router.get('/', getUsers);
 router.post('/',
     [
         check('name', ' Name required').not().isEmpty(),
+        check('password', ' Password required').not().isEmpty(),
         validateFields
     ], 
     createUser
