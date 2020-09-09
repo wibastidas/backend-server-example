@@ -2,10 +2,11 @@
 const { response } = require('express');
 
 const Transaction = require('../models/transaction');
+const moment = require('moment');
 
 const getTransactions = async(req, res) => {
 
-    const transactions = await Transaction.find({}, 'accountFrom accountTo amount date description');
+    const transactions = await Transaction.find({}, 'accountFrom accountTo amount description created_at');
 
     res.json({
         ok:true,
@@ -34,6 +35,11 @@ const createTrasaction = async(req, res = response) => {
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
 
         const transaction = new Transaction(req.body);
+        transaction.created_at = moment().unix();
+        //const date = moment().unix();
+        //console.log('calendar:',  moment.unix(date).format("MM/DD/YYYY"));
+
+        
 
         await transaction.save();
     

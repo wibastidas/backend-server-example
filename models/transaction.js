@@ -22,8 +22,8 @@ const TransactionSchema = Schema({
         required: true
     },
 
-    date: {
-        type: Date,
+    created_at: {
+        type: Number,
         required: false
     },
 
