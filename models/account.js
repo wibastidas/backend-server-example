@@ -4,11 +4,16 @@ const AccountSchema = Schema({
 
     id: {
         type: Number,
-        required: true
+        required: false
     },
 
     currency_id: {
-        type: Number,
+        type: String,
+        required: true
+    },
+
+    user_id: {
+        type: String,
         required: true
     },
 

@@ -26,11 +26,9 @@ console.log(process.env.PORT);
 //Rutas
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/transfer', require('./routes/transactions'));
-
-//otras
 app.use('/api/currencies', require('./routes/currencies'));
-// app.use('/api/accounts', require('./routes/accounts'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/accounts', require('./routes/accounts'));
 
 
 app.listen( process.env.PORT, () => {
