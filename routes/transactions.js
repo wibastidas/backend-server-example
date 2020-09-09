@@ -7,12 +7,12 @@ const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/ validate-fields')
 
 const { getTransactions, createTrasaction } = require('../controllers/transactions')
-
+const { validarJWT } = require('../middlewares/validate-jwt');
 
 const router = Router();
 
 
-router.get('/', getTransactions);
+router.get('/', validarJWT ,getTransactions);
 router.post('/',
     [
         check('accountFrom', ' Account required').not().isEmpty(),
@@ -22,7 +22,5 @@ router.post('/',
     ], 
     createTrasaction
 );
-
-
 
 module.exports = router;
