@@ -13,7 +13,7 @@ const router = Router();
 
 
 router.get('/', validarJWT ,getTransactions);
-router.post('/',
+router.post('/', validarJWT, 
     [
         check('accountFrom', ' Account required').not().isEmpty(),
         check('accountTo', ' Account required').not().isEmpty(),

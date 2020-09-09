@@ -1,5 +1,7 @@
 
 
+const jwt = require('jsonwebtoken');
+
 const validarJWT = (req, res, next) => {
 
     //leer token
@@ -12,11 +14,9 @@ const validarJWT = (req, res, next) => {
         });
     }
 
-    console.log(token);
-
     try { 
 
-        //aca deberiamos validar el token enviado sea correcto
+        const { id } = jwt.verify(token, process.env.JWT_SECRET);
         next();
         
     } catch {
