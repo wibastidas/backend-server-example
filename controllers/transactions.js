@@ -1,32 +1,26 @@
 
 const { response } = require('express');
-const { validationResult } = require('express-validator');
 
 const Transaction = require('../models/transaction');
+const Currency = require('../models/currency');
 
 const getTransactions = async(req, res) => {
 
 
     const transactions = await Transaction.find({}, 'accountFrom accountTo amount date description');
+    const currency = await Currency.find({}, 'name code');
+
 
     res.json({
         ok:true,
-        transactions
+        transactions,
+        currency
     })
 }
 
 const createTrasaction = async(req, res = response) => {
 
     const { accountFrom, accountTo, amount, description} = req.body;
-
-    const errors = validationResult(req);
-
-    if( !errors.isEmpty() ) {
-        return res.status(400).json({
-            ok: false,
-            errors: errors.mapped()
-        })
-    }
 
     try {
 
@@ -44,9 +38,6 @@ const createTrasaction = async(req, res = response) => {
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
 
-
-
-        console.log('accountsSame: ', accountsSame);
         const transaction = new Transaction(req.body);
 
         await transaction.save();
@@ -64,6 +55,8 @@ const createTrasaction = async(req, res = response) => {
         })
     }
 }
+
+
 
 module.exports = {
     getTransactions,
