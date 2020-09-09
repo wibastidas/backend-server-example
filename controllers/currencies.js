@@ -22,7 +22,7 @@ const createCurrency = async(req, res = response) => {
 
         const existsCurrencyCode = await Currency.findOne({code});
 
-        if(existsCurrencyCode){
+        if(existsCurrencyCode) {
             return res.status(400).json({
                 ok: false,
                 msg: 'El codigo de moneda ya existe!'

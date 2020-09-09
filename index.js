@@ -30,7 +30,7 @@ app.use('/api/transfer', require('./routes/transactions'));
 //otras
 app.use('/api/currencies', require('./routes/currencies'));
 // app.use('/api/accounts', require('./routes/accounts'));
-// app.use('/api/users', require('./routes/users'));
+app.use('/api/users', require('./routes/users'));
 
 
 app.listen( process.env.PORT, () => {
