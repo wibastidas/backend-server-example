@@ -18,7 +18,8 @@ router.post('/', validarJWT,
     [
         check('account_number', ' Account Number required').not().isEmpty(),
         check('balance', ' Balance required').not().isEmpty(),
-        check('currency_id', ' Currency Id required').not().isEmpty(),
+        check('code', ' Code required').not().isEmpty(),
+
         validateFields
     ], 
     createAccount

@@ -7,8 +7,9 @@ const AccountSchema = Schema({
         required: false
     },
 
-    currency_id: {
-        type: String,
+    currency: {
+        type: Schema.Types.ObjectId,
+        ref: 'Currency',
         required: true
     },
 
