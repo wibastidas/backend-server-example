@@ -6,6 +6,12 @@ const moment = require('moment');
 
 const getTransactions = async(req, res) => {
 
+    const { from, to, sourceAccountID } = req.query;
+
+    console.log("from: ", from)
+    console.log("to: ", to)
+    console.log("sourceAccountID: ", sourceAccountID)
+
     const transactions = await Transaction.find({}, 'accountFrom accountTo amount description created_at');
 
     res.json({
@@ -36,8 +42,8 @@ const createTrasaction = async(req, res = response) => {
 
         const transaction = new Transaction(req.body);
         transaction.created_at = moment().unix();
-        //const date = moment().unix();
-        //console.log('calendar:',  moment.unix(date).format("MM/DD/YYYY"));
+        const date = moment().unix();
+        console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 
         
 

@@ -12,7 +12,7 @@ const { validarJWT } = require('../middlewares/validate-jwt');
 const router = Router();
 
 
-router.get('/', validarJWT ,getTransactions);
+router.get('/:from?/:to?/:sourceAccountID?', validarJWT ,getTransactions);
 router.post('/', validarJWT, 
     [
         check('accountFrom', ' Account required').not().isEmpty(),
@@ -24,3 +24,4 @@ router.post('/', validarJWT,
 );
 
 module.exports = router;
+
