@@ -17,15 +17,23 @@ const createAccount = async(req, res = response) => {
 
     console.log(req.id);
 
+    const id = req.id;
+    const account = new Account({ 
+        user: id,
+        ...req.body 
+    });
+
     try {
 
-        const account = new Account(req.body);
+        //const account = new Account(req.body);
 
-        await account.save();
+        const accountDB = await account.save();
+
+        //await account.save();
     
         res.json({
             ok:true,
-            account
+            account: accountDB
         })
          
     } catch {

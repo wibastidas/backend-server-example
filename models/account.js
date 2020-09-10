@@ -12,11 +12,11 @@ const AccountSchema = Schema({
         required: true
     },
 
-    // user: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true
-    // },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 
     account_number: {
         type: Number,
