@@ -48,8 +48,8 @@ const createTrasaction = async(req, res = response) => {
         //                                    .populate('user','name');
 
         const [ accountOrigin, accountDest] = await Promise.all([
-            Account.findOne({account_number: accountFrom}).populate('user','name'),
-            Account.findOne({account_number: accountTo}).populate('user','name')
+            Account.findOne({account_number: accountFrom}).populate('currency','code').populate('user','name'),
+            Account.findOne({account_number: accountTo}).populate('currency','code').populate('user','name')
         ])
 
         if(!accountOrigin) {
@@ -66,16 +66,27 @@ const createTrasaction = async(req, res = response) => {
             })
         }
 
-        console.log(accountOrigin.user._id);
-        console.log(accountDest.user._id);
+        //validar si la transacción se realiza para un tercero
         if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
             console.log('Transferencia entre cuentas distinto titular');
+            //aplicará una comisión por transacción del 1% del monto transferido
         } else {
             console.log('Transferencia entre cuentas del mismo titular');
         }
 
-        // console.log('account: ', account)
+        console.log(accountOrigin.currency.code);
+        console.log(accountDest.currency.code);
+        if(accountOrigin.currency.code.toString() != accountDest.currency.code.toString()) {
+            console.log('Transferencia entre cuentas distinta moneda');
+            //hay que hacer la conversión a la divisa destino.
+        } else {
+            console.log('Transferencia entre cuentas misma moneda');
+
+        }
+
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
+
+        // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
 
         const transaction = new Transaction(req.body);
         transaction.created_at = moment().unix();
