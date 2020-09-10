@@ -75,10 +75,9 @@ const createTrasaction = async(req, res = response) => {
             console.log('Transferencia entre cuentas del mismo titular');
         }
 
-        console.log(accountOrigin.currency.code);
-        console.log(accountDest.currency.code);
 
         let amountToTransfer;
+        let transferFee = 0;
         if(accountOrigin.currency.code.toString() != accountDest.currency.code.toString()) {
             console.log('Transferencia entre cuentas distinta moneda');
             //hay que hacer la conversión a la divisa destino.
@@ -86,17 +85,25 @@ const createTrasaction = async(req, res = response) => {
             amountToTransfer = await convertCurrency(accountOrigin.currency.code, accountDest.currency.code, amount);
             console.log('amountToTransfer:', amountToTransfer);
 
+            transferFee = amountToTransfer * 0.01;
+            console.log('transferFee:', transferFee);
+
         } else {
             amountToTransfer = amount;
             console.log('Transferencia entre cuentas misma moneda');
-
         }
 
-        
-
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
+        if(amountToTransfer > accountOrigin.balance){
+            return res.status(400).json({
+                ok: false,
+                msg: 'Saldo Insuficiente.'
+            });
+        }
 
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
+        let newBalance = accountOrigin.balance - (parseFloat(amountToTransfer) + parseFloat(transferFee)) ;
+        //accountOrigin._id 
 
         const transaction = new Transaction({accountFrom, accountTo, amount: amountToTransfer, description});
         transaction.created_at = moment().unix();

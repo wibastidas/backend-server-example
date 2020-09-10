@@ -11,7 +11,7 @@ const convertCurrency = async (fromCurrency, toCurrency, amount)  => {
     const exchangeRate = euro * rate[toCurrency]; //esa unidad en euros la multiplico por el valor de toCurrency en base al euro
     console.log('exchangeRate: ', exchangeRate);
 
-    const convertedAmount = (amount * exchangeRate).toFixed(2); //finalmente obtengo la conversion
+    const convertedAmount = (amount * exchangeRate).toFixed(3); //finalmente obtengo la conversion
 
     return convertedAmount;
 
