@@ -13,7 +13,7 @@ const convertCurrency = async (fromCurrency, toCurrency, amount)  => {
 
     const convertedAmount = (amount * exchangeRate).toFixed(2); //finalmente obtengo la conversion
 
-    return `${amount} ${fromCurrency} is worth ${convertedAmount} ${toCurrency}.`;
+    return convertedAmount;
 
   } catch (error) {
     throw new Error(`Unable to get currency ${fromCurrency} and  ${toCurrency}`);

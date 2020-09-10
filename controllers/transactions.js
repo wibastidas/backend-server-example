@@ -77,23 +77,28 @@ const createTrasaction = async(req, res = response) => {
 
         console.log(accountOrigin.currency.code);
         console.log(accountDest.currency.code);
+
+        let amountToTransfer;
         if(accountOrigin.currency.code.toString() != accountDest.currency.code.toString()) {
             console.log('Transferencia entre cuentas distinta moneda');
             //hay que hacer la conversión a la divisa destino.
+            //convertir moneda
+            amountToTransfer = await convertCurrency(accountOrigin.currency.code, accountDest.currency.code, amount);
+            console.log('amountToTransfer:', amountToTransfer);
+
         } else {
+            amountToTransfer = amount;
             console.log('Transferencia entre cuentas misma moneda');
 
         }
 
-        //convertir moneda
-        const resultado = await convertCurrency('UYU', 'USD', 10);
-        console.log('resultado:', resultado);
+        
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
 
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
 
-        const transaction = new Transaction(req.body);
+        const transaction = new Transaction({accountFrom, accountTo, amount: amountToTransfer, description});
         transaction.created_at = moment().unix();
         const date = moment().unix();
         //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
@@ -123,3 +128,10 @@ module.exports = {
     getTransactions,
     createTrasaction
 }
+
+
+// 1234567891 pesos william
+// 1234567890 dolares william
+// 1234567892 euros william
+
+// 9876543210  pesos otro titular
