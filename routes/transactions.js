@@ -4,7 +4,7 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { validateFields } = require('../middlewares/ validate-fields')
+const { validateFields } = require('../middlewares/validate-fields')
 
 const { getTransactions, createTrasaction } = require('../controllers/transactions')
 const { validarJWT } = require('../middlewares/validate-jwt');

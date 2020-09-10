@@ -9,7 +9,7 @@ const generateJWT = (id) => {
         }
     
         jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: 72
+            expiresIn: '12h'
         }, (err, token) => {
             if(err) { 
                 console.log(err)

@@ -5,17 +5,19 @@ const Account = require('../models/account');
 
 const getAccounts = async(req, res) => {
 
-
     const accounts = await Account.find({}, 'account_number balance user_id currency_id');
 
     res.json({
         ok:true,
-        accounts
+        accounts,
+        uid: req.uid
     })
 }
 
 const createAccount = async(req, res = response) => {
+    // const uid = req.uid;
 
+    // console.log(uid);
 
     try {
 
