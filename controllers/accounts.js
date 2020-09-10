@@ -7,7 +7,7 @@ const Currency = require('../models/currency');
 
 const getAccounts = async(req, res) => {
 
-    const accounts = await Account.find({}, 'account_number balance user_id currency');
+    const accounts = await Account.find({}, 'account_number balance user currency');
 
     res.json({
         ok:true,
