@@ -9,15 +9,13 @@ const getAccounts = async(req, res) => {
 
     res.json({
         ok:true,
-        accounts,
-        uid: req.id
+        accounts
     })
 }
 
 const createAccount = async(req, res = response) => {
-    // const uid = req.uid;
 
-    // console.log(uid);
+    console.log(req.id);
 
     try {
 
