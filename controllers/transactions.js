@@ -42,8 +42,16 @@ const createTrasaction = async(req, res = response) => {
         console.log('accountFrom: ', accountFrom)
 
         //validar si la cuenta de destino no pertenece al usuario logeado aplicar comision 1% sobre el monto de la cuenta origen
-        const accountOrigin = await Account.findOne({account_number: accountFrom})
-                                           .populate('user','name');
+        // const accountOrigin = await Account.findOne({account_number: accountFrom})
+        //                                    .populate('user','name');
+        // const accountDest = await Account.findOne({account_number: accountTo})
+        //                                    .populate('user','name');
+
+        const [ accountOrigin, accountDest] = await Promise.all([
+            Account.findOne({account_number: accountFrom}).populate('user','name'),
+            Account.findOne({account_number: accountTo}).populate('user','name')
+        ])
+
         if(!accountOrigin) {
             return res.status(400).json({
                 ok: false,
@@ -51,13 +59,19 @@ const createTrasaction = async(req, res = response) => {
             })
         }
 
-        const accountDest = await Account.findOne({account_number: accountTo})
-                                           .populate('user','name');
         if(!accountDest) {
             return res.status(400).json({
                 ok: false,
                 msg: 'El numero de cuenta Destino no esta registrado.'
             })
+        }
+
+        console.log(accountOrigin.user._id);
+        console.log(accountDest.user._id);
+        if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
+            console.log('Transferencia entre cuentas distinto titular');
+        } else {
+            console.log('Transferencia entre cuentas del mismo titular');
         }
 
         // console.log('account: ', account)
@@ -66,14 +80,16 @@ const createTrasaction = async(req, res = response) => {
         const transaction = new Transaction(req.body);
         transaction.created_at = moment().unix();
         const date = moment().unix();
-        console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
+        //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 
     
         //await transaction.save();
     
         res.json({
             ok:true,
-            transaction
+            transaction,
+            accountOrigin,
+            accountDest
         })
          
     } catch {

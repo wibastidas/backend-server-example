@@ -22,7 +22,7 @@ const createAccount = async(req, res = response) => {
     //check currency code
     const currencyDB = await Currency.findOne({code: req.body.code});
 
-    console.log("currencyDB:", currencyDB);
+    //console.log("currencyDB:", currencyDB);
 
 
     if(!currencyDB) {
@@ -32,20 +32,16 @@ const createAccount = async(req, res = response) => {
         });
     }
 
-    const id = req.id;
+    console.log('req.id:', req.id);
     const account = new Account({ 
-        user: id,
+        user: req.id,
         currency: currencyDB,
         ...req.body 
     });
 
     try {
 
-        //const account = new Account(req.body);
-
         const accountDB = await account.save();
-
-        //await account.save();
     
         res.json({
             ok:true,
