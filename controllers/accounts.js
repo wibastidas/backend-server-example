@@ -10,7 +10,7 @@ const getAccounts = async(req, res) => {
     res.json({
         ok:true,
         accounts,
-        uid: req.uid
+        uid: req.id
     })
 }
 
