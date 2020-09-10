@@ -104,19 +104,29 @@ const createTrasaction = async(req, res = response) => {
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
         let newBalance = accountOrigin.balance - (parseFloat(amountToTransfer) + parseFloat(transferFee)) ;
         //accountOrigin._id 
+        //accountOrigin.balance = newBalance
+        console.log('newBalance:', newBalance);
 
-        const transaction = new Transaction({accountFrom, accountTo, amount: amountToTransfer, description});
+        // let accountChanges = {
+        //     balance: parseFloat(newBalance)
+        // };
+
+        // console.log('accountChanges:', accountChanges);
+
+        const accountUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalance }, {new: true})
+
+        const transaction = new Transaction({accountFrom, accountTo, amount: parseFloat(amountToTransfer), description});
         transaction.created_at = moment().unix();
         const date = moment().unix();
         //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 
     
-        //await transaction.save();
+        await transaction.save();
     
         res.json({
             ok:true,
             transaction,
-            accountOrigin,
+            accountUpdated,
             accountDest
         })
          
