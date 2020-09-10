@@ -1,5 +1,6 @@
 
 const { response } = require('express');
+const { convertCurrency } = require('../helpers/currency-converter')
 
 const Transaction = require('../models/transaction');
 const Account = require('../models/account');
@@ -83,6 +84,10 @@ const createTrasaction = async(req, res = response) => {
             console.log('Transferencia entre cuentas misma moneda');
 
         }
+
+        //convertir moneda
+        const resultado = await convertCurrency('UYU', 'USD', 10);
+        console.log('resultado:', resultado);
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
 
