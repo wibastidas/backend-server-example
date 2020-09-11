@@ -59,9 +59,10 @@ const TransactionSchema = Schema({
 });
 
 TransactionSchema.method('toJSON', function() {
-    const { __v, _id, ...object } = this.toObject();
+    const { __v, _id, user, accountFromId, accountToId, ...object } = this.toObject();
     object.id = _id;
-    //object.created_at = moment.unix(created_at).format("MM-DD-YYYY");
+    object.accountFrom = accountFromId.account_number,
+    object.accountTo = accountToId.account_number
     return object;
 });
 

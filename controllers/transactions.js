@@ -18,7 +18,7 @@ const getTransactions = async(req, res) => {
     (sourceAccountID) ? (query.accountFromId = sourceAccountID) : "";
     (from && to) ? (query.created_at = { $gte: from, $lte: to }) : "";
 
-    const transactions = await Transaction.find(query).sort('-created_at').populate('user','_id').populate('accountFromId');
+    const transactions = await Transaction.find(query).populate('user','_id').populate('accountFromId').populate('accountToId');
 
     res.json({
         ok:true,
@@ -134,3 +134,9 @@ module.exports = {
     getTransactions,
     createTrasaction
 }
+
+// 1234567891 pesos william
+// 1234567890 dolares william
+// 1234567892 euros william
+
+// 9876543210  pesos otro titular
