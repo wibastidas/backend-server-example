@@ -4,42 +4,21 @@ const { convertCurrency } = require('../helpers/currency-converter')
 
 const Transaction = require('../models/transaction');
 const Account = require('../models/account');
-const User = require('../models/user');
-
 const moment = require('moment');
+
 
 const getTransactions = async(req, res) => {
 
     const { from, to, sourceAccountID } = req.query;
 
     let query = {
-        user: req.id,
-        //created_at: { $gte: '2020-09-10', $lte: '2020-09-13' }
+        user: req.id
     };
 
     (sourceAccountID) ? (query.accountFromId = sourceAccountID) : "";
     (from && to) ? (query.created_at = { $gte: from, $lte: to }) : "";
 
-
-    console.log("from: ", from)
-    console.log("to: ", to)
-    console.log("sourceAccountID: ", sourceAccountID)
-    console.log("req.id: ", req.id)
-    //console.log("query ", query)
-
-
-    //const transactions = await Transaction.find({}, 'accountFrom accountTo amount description created_at');
     const transactions = await Transaction.find(query).sort('-created_at').populate('user','_id').populate('accountFromId');
-    //const transactions = await Transaction.find({"created_at":{ $gte:ISODate("2019-02-10"), $lt:ISODate("2019-02-21") }})
-
-    //const transactions = await Transaction.find("created_at", {"$gte": new Date("2015-10-01T00:00:00.000Z") , "$lt": new Date("2017-03-13T16:17:36.470Z") });
-    // const transactions = await Transaction.find({created_at: {
-    //     $gte: "2020-09-11T05:01:43.939Z",
-    //     $lt: "2020-09-11T05:01:43.939Z"}})
-
-    //const transactions = await Transaction.find({ created_at: new Date('2002-12-09') })
-
-    //const transactions = await Transaction.find({ created_at: { $gte: '2020-09-10', $lte: '2020-09-12' } })
 
     res.json({
         ok:true,
@@ -110,23 +89,15 @@ const createTrasaction = async(req, res = response) => {
             });
         }
 
-        console.log('transferFee', transferFee);
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
         let newBalanceOrigin = accountOrigin.balance - (parseFloat(amount) + parseFloat(transferFee)) ;
         let newBalanceDest = accountDest.balance + parseFloat(amountToTransfer);
-
 
         //aplicar cargo en la cuenta origen
         const accountOriginUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalanceOrigin }, {new: true})
 
         //aplicar abono a la cuenta destino
         const accountDestUpdated = await Account.findByIdAndUpdate(accountDest._id,{ balance: newBalanceDest }, {new: true})
-
-
-        console.log('req.id:', req.id);
-        console.log('accountOrigin._id:', accountOrigin._id);
-
-        console.log('accountDest._id:', accountDest._id);
 
         const transaction = new Transaction({ 
             user: req.id,
@@ -138,16 +109,8 @@ const createTrasaction = async(req, res = response) => {
             description
         });
 
-
-        //transaction.created_at = moment().unix();
         const now = new Date()
-        //transaction.created_at = '2002-12-09'
         transaction.created_at = moment();
-
-        //transaction.created_at = moment().add(1, 'day').unix();
-
-        //const date = moment().unix();
-        //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 
         await transaction.save();
     
