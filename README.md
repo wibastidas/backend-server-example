@@ -23,7 +23,7 @@ Obtiene todos los usuarios de la base de datos.
 
 #### Login
 `POST  /api/login`
-Valida las credenciales del usuario y devuelve un JSON Web token necesario para realizar `transactions` en la aplicación.  
+Valida las credenciales del usuario utilizando bcrypt para comparar la contraseña enviada por el usuario con la constreña encriptada de la base de datos y devuelve un JSON Web token necesario para realizar `transactions` en la aplicación.  
 
 #### Currencies
 `POST  /api/currencies`
@@ -47,6 +47,20 @@ Realiza la transferencia entre una cuenta de origen y una cuenta destino, las cu
 El Schema `Transaction` tiene una referencia del Schema `Account` para relacionar con la informacion de las cuentas de origen y destino.  
 El Schema `Transaction` tiene una referencia del Schema `User` para saber el usuario que realizo la transaction.  
 
+### Base de datos
+Para trabajar con base de datos se utilizó Mongo Atlas, el cual es una base de datos Mongo en la nube y  ofrece hasta 500MB de almacenamiento en su version gratuita.
+
+### Conversión de divisa 
+Para convertir de una divisa a otra se creo una funcion que recibe fromCurrency, toCurrency y amount. 
+fixer.io tiene endpoint para convertir de una divisa a otra pero el mismo solo esta disponible en su versión de pago.
+La alternativa fue utilizar el enpoint disponible en la versión gratuita que nos permite obtener el último tipo de cambio para todas las divisas disponibles en base al Euro y a partir de este dato realizar los calculos. 
 
 
-
+### Mejoras
+Por limitaciones de tiempo las siguientes features no fueron implementadas:
+Paginar resultado de busqueda para el enpoint GET transactions.
+Validar que no exista el email del usuario que se esta registrando en la base de datos. 
+Permiter hacer CRUD de users, account, currency...
+Validar que el getAccounts solo devuleva las cuentas del usuario logeado.
+Guardar un estatus de la transaccion y si falla poder retomar la misma. 
+Agregar Validaciones en general.
