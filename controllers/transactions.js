@@ -50,16 +50,13 @@ const createTrasaction = async(req, res = response) => {
         }
 
         const accountsSame = accountFrom === accountTo;
-
-        //validamos que la cuenta de origen y destino no sean iguales
         if(accountsSame) {
             return res.status(400).json({
                 ok: false,
                 msg: 'Las cuentas no pueden ser iguales.'
             })
         }
-        
-        //validar que la cuenta origen pertenezca al usuario logeado
+
         if(req.id != accountOrigin.user._id) {
             return res.status(400).json({
                 ok: false,
