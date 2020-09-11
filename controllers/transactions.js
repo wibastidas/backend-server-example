@@ -30,24 +30,6 @@ const createTrasaction = async(req, res = response) => {
 
     try {
 
-        const accountsSame = accountFrom === accountTo;
-
-        //validamos que la cuenta de origen y destino no sean iguales
-        if(accountsSame) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Las cuentas no pueden ser iguales.'
-            })
-        }
-
-        console.log('accountFrom: ', accountFrom)
-
-        //validar si la cuenta de destino no pertenece al usuario logeado aplicar comision 1% sobre el monto de la cuenta origen
-        // const accountOrigin = await Account.findOne({account_number: accountFrom})
-        //                                    .populate('user','name');
-        // const accountDest = await Account.findOne({account_number: accountTo})
-        //                                    .populate('user','name');
-
         const [ accountOrigin, accountDest] = await Promise.all([
             Account.findOne({account_number: accountFrom}).populate('currency','code').populate('user','name'),
             Account.findOne({account_number: accountTo}).populate('currency','code').populate('user','name')
@@ -67,33 +49,38 @@ const createTrasaction = async(req, res = response) => {
             })
         }
 
+        const accountsSame = accountFrom === accountTo;
+
+        //validamos que la cuenta de origen y destino no sean iguales
+        if(accountsSame) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Las cuentas no pueden ser iguales.'
+            })
+        }
+        
+        //validar que la cuenta origen pertenezca al usuario logeado
+        if(req.id != accountOrigin.user._id) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'La cuenta no pertenece al usuario logeado'
+            })
+        }
+
         let transferFee = 0;
         let amountToTransfer;
 
+        //conversión a la divisa destino si son diferentes
         if(accountOrigin.currency.code.toString() != accountDest.currency.code.toString()) {
-            console.log('Transferencia entre cuentas distinta moneda');
-            //hay que hacer la conversión a la divisa destino.
-            //convertir moneda
             amountToTransfer = await convertCurrency(accountOrigin.currency.code, accountDest.currency.code, amount);
-            console.log('amountToTransfer:', amountToTransfer);
-
-
         } else {
             amountToTransfer = amount;
-            console.log('Transferencia entre cuentas misma moneda');
         }
 
-        //validar si la transacción se realiza para un tercero
+        //validar si la transacción se realiza para un tercero y aplicar  comisión  1% del monto transferido
         if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
-            console.log('Transferencia entre cuentas distinto titular');
-            //aplicará una comisión por transacción del 1% del monto transferido
-
             transferFee = amountToTransfer * 0.01;
-        } else {
-            console.log('Transferencia entre cuentas del mismo titular');
-        }
-
-        console.log('transferFee:', transferFee);
+        } 
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
         if(amountToTransfer > accountOrigin.balance){
@@ -106,16 +93,15 @@ const createTrasaction = async(req, res = response) => {
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
         let newBalance = accountOrigin.balance - (parseFloat(amountToTransfer) + parseFloat(transferFee)) ;
 
-        console.log('newBalance:', newBalance);
-
+        //aplicar cargo en la cuenta origen
         const accountUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalance }, {new: true})
 
+        //crear la transaccion
         const transaction = new Transaction({accountFrom, accountTo, amount: parseFloat(amountToTransfer), description});
         transaction.created_at = moment().unix();
-        const date = moment().unix();
+        //const date = moment().unix();
         //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 
-    
         await transaction.save();
     
         res.json({
@@ -133,8 +119,6 @@ const createTrasaction = async(req, res = response) => {
         })
     }
 }
-
-
 
 module.exports = {
     getTransactions,
