@@ -12,11 +12,24 @@ const getTransactions = async(req, res) => {
 
     const { from, to, sourceAccountID } = req.query;
 
-    // console.log("from: ", from)
-    // console.log("to: ", to)
-    // console.log("sourceAccountID: ", sourceAccountID)
+    let query = {
+        user: req.id
+    };
 
-    const transactions = await Transaction.find({}, 'accountFrom accountTo amount description created_at');
+    (sourceAccountID) ? (query.accountFromId = sourceAccountID) : "";
+    (from) ? (query.created_at = moment(from).unix()) : "";
+    (to) ? (query.created_at = to) : "";
+
+
+    console.log("from: ", from)
+    console.log("to: ", to)
+    console.log("sourceAccountID: ", sourceAccountID)
+    console.log("req.id: ", req.id)
+    console.log("query ", query)
+
+
+    //const transactions = await Transaction.find({}, 'accountFrom accountTo amount description created_at');
+    const transactions = await Transaction.find(query).populate('user','_id').populate('accountFromId');
 
     res.json({
         ok:true,
@@ -99,9 +112,25 @@ const createTrasaction = async(req, res = response) => {
         //aplicar abono a la cuenta destino
         const accountDestUpdated = await Account.findByIdAndUpdate(accountDest._id,{ balance: newBalanceDest }, {new: true})
 
-        //crear la transaccion
-        const transaction = new Transaction({accountFrom, accountTo, amount: parseFloat(amountToTransfer), description});
+
+        console.log('req.id:', req.id);
+        console.log('accountOrigin._id:', accountOrigin._id);
+
+        console.log('accountDest._id:', accountDest._id);
+
+        const transaction = new Transaction({ 
+            user: req.id,
+            accountFromId: accountOrigin._id, 
+            accountToId: accountDest._id, 
+            accountFromCode: accountOrigin.currency.code,
+            accountToCode: accountDest.currency.code,
+            amount: parseFloat(amountToTransfer), 
+            description
+        });
+
+
         transaction.created_at = moment().unix();
+        
         //transaction.created_at = moment().add(1, 'day').unix();
 
         //const date = moment().unix();

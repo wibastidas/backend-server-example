@@ -8,13 +8,25 @@ const TransactionSchema = Schema({
         required: false
     },
 
-    accountFrom: {
-        type: Number,
+    accountFromId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Account',
         required: true
     },
 
-    accountTo: {
-        type: Number,
+    accountToId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Account',
+        required: true
+    },
+
+    accountFromCode: {
+        type: String,
+        required: true
+    },
+
+    accountToCode: {
+        type: String,
         required: true
     },
 
@@ -33,15 +45,16 @@ const TransactionSchema = Schema({
         required: false
     },
 
-    user_id: {
-        type: Number,
-        required: false
-    },
-
     status: {
         type: String,
         required: false
-    }
+    },
+
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 
 });
 
