@@ -27,26 +27,25 @@ Valida las credenciales del usuario y devuelve un JSON Web token necesario para 
 
 #### Currencies
 `POST  /api/currencies`
-Crea una divisa en la base de datos.  Recibe name y code. 
+Crea una divisa en la base de datos.  Recibe name y code.  
 `GET     /api/currencies`
 Obtiene todos las divisa de la base de datos.  
 
 #### Accounts
 `POST  /api/accounts`
 Crea una cuenta en la base de datos.  
-El Schema Account tiene una referencia del Schema User para relacionar con usuario pertenece la cuenta. (En este caso el usuario que la creo).  
-El Schema Account tiene una referencia del Schema Currency para relacionar con la informacion de la divisa.  
+El Schema `Account` tiene una referencia del Schema `User` para relacionar con usuario pertenece la cuenta. (En este caso el usuario que la creo).  
+El Schema `Account` tiene una referencia del Schema `Currency` para relacionar con la informacion de la divisa.  
 `GET     /api/accounts`
 Obtiene todos las cuentas de la base de datos.   
 
 #### Transactions
 `GET    /api/transactions`
 Obtiene las transacciones para el usuario logueado, opcionalmente se puede filtrar por un rango de fechas e incluso por identificador de cuenta origen.  
-El Schema Transaction tiene una referencia del Schema Account para relacionar con la informacion de las cuentas de origen y destino.
-El Schema Transaction tiene una referencia del Schema User para saber el usuario que realizo la transaction
-`POST  /api/transfer`
-Realiza la transferencia entre una cuenta de origen y una cuenta destino, las cuentas pueden ser del mismo usuario o no.  
-
+`POST  /api/transfer`  
+Realiza la transferencia entre una cuenta de origen y una cuenta destino, las cuentas pueden ser del mismo usuario o no.   
+El Schema `Transaction` tiene una referencia del Schema `Account` para relacionar con la informacion de las cuentas de origen y destino.  
+El Schema `Transaction` tiene una referencia del Schema `User` para saber el usuario que realizo la transaction.  
 
 
 
