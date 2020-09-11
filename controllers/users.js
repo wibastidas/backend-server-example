@@ -3,11 +3,10 @@ const { response } = require('express');
 const { generateJWT } = require('../helpers/jwt')
 
 const bcrypt = require('bcryptjs')
-
 const User = require('../models/user');
 
-const getUsers = async(req, res) => {
 
+const getUsers = async(req, res) => {
 
     const users = await User.find({});
 
