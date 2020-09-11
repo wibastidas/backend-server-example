@@ -6,6 +6,12 @@ Prerrequisitos
 Administrador de paquetes   
 ```npm```  
 
+Mongo Compass  
+https://www.mongodb.com/try/download/compass  
+
+Cadena de conexion Mongo Compass   
+mongodb+srv://mean_user:21uwU4djunPWP4ds@cluster0.bbdzs.mongodb.net/bankdb  
+
 Instalar dependencias
 ```
 npm install 
