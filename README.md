@@ -1,5 +1,11 @@
 # Backend Server Example
 
+Prerrequisitos  
+```Node.js```
+
+Administrador de paquetes   
+```npm```  
+
 Instalar dependencias
 ```
 npm install 
