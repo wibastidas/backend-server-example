@@ -13,9 +13,9 @@ npm run start:dev
 ## Endpoints disponibles:
 
 ###### Users
-`POST  /api/users`
+```POST  /api/users```
 Crea un usuario en la base de datos.
-`GET   /api/users`
+```GET   /api/users```
 Obtiene todos los usuarios de la base de datos. 
 
 ###### Login
