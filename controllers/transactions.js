@@ -76,7 +76,7 @@ const createTrasaction = async(req, res = response) => {
 
         //validar si la transacción se realiza para un tercero y aplicar  comisión  1% del monto transferido
         if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
-            transferFee = amountToTransfer * 0.01;
+            transferFee = amount * 0.01;
         } 
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
@@ -88,10 +88,15 @@ const createTrasaction = async(req, res = response) => {
         }
 
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
-        let newBalance = accountOrigin.balance - (parseFloat(amountToTransfer) + parseFloat(transferFee)) ;
+        let newBalanceOrigin = accountOrigin.balance - (parseFloat(amount) + parseFloat(transferFee)) ;
+        let newBalanceDest = accountDest.balance + parseFloat(amountToTransfer);
+
 
         //aplicar cargo en la cuenta origen
-        const accountUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalance }, {new: true})
+        const accountOriginUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalanceOrigin }, {new: true})
+
+        //aplicar abono a la cuenta destino
+        const accountDestUpdated = await Account.findByIdAndUpdate(accountDest._id,{ balance: newBalanceDest }, {new: true})
 
         //crear la transaccion
         const transaction = new Transaction({accountFrom, accountTo, amount: parseFloat(amountToTransfer), description});
@@ -104,8 +109,8 @@ const createTrasaction = async(req, res = response) => {
         res.json({
             ok:true,
             transaction,
-            accountUpdated,
-            accountDest
+            accountOriginUpdated,
+            accountDestUpdated
         })
          
     } catch {
