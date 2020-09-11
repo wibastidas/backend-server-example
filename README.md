@@ -14,9 +14,9 @@ npm run start:dev
 
 #### Users
 `POST  /api/users`
-Crea un usuario en la base de datos. 
+Crea un usuario en la base de datos.  
 `GET   /api/users`
-Obtiene todos los usuarios de la base de datos. 
+Obtiene todos los usuarios de la base de datos.  
 
 #### Login
 `POST  /api/login`
