@@ -67,17 +67,9 @@ const createTrasaction = async(req, res = response) => {
             })
         }
 
-        //validar si la transacción se realiza para un tercero
-        if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
-            console.log('Transferencia entre cuentas distinto titular');
-            //aplicará una comisión por transacción del 1% del monto transferido
-        } else {
-            console.log('Transferencia entre cuentas del mismo titular');
-        }
-
-
-        let amountToTransfer;
         let transferFee = 0;
+        let amountToTransfer;
+
         if(accountOrigin.currency.code.toString() != accountDest.currency.code.toString()) {
             console.log('Transferencia entre cuentas distinta moneda');
             //hay que hacer la conversión a la divisa destino.
@@ -85,13 +77,23 @@ const createTrasaction = async(req, res = response) => {
             amountToTransfer = await convertCurrency(accountOrigin.currency.code, accountDest.currency.code, amount);
             console.log('amountToTransfer:', amountToTransfer);
 
-            transferFee = amountToTransfer * 0.01;
-            console.log('transferFee:', transferFee);
 
         } else {
             amountToTransfer = amount;
             console.log('Transferencia entre cuentas misma moneda');
         }
+
+        //validar si la transacción se realiza para un tercero
+        if(accountOrigin.user._id.toString() != accountDest.user._id.toString()){
+            console.log('Transferencia entre cuentas distinto titular');
+            //aplicará una comisión por transacción del 1% del monto transferido
+
+            transferFee = amountToTransfer * 0.01;
+        } else {
+            console.log('Transferencia entre cuentas del mismo titular');
+        }
+
+        console.log('transferFee:', transferFee);
 
         // validar que el monto de la operacion no sea mayor al monto disponible en la cuenta 
         if(amountToTransfer > accountOrigin.balance){
@@ -103,15 +105,8 @@ const createTrasaction = async(req, res = response) => {
 
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
         let newBalance = accountOrigin.balance - (parseFloat(amountToTransfer) + parseFloat(transferFee)) ;
-        //accountOrigin._id 
-        //accountOrigin.balance = newBalance
+
         console.log('newBalance:', newBalance);
-
-        // let accountChanges = {
-        //     balance: parseFloat(newBalance)
-        // };
-
-        // console.log('accountChanges:', accountChanges);
 
         const accountUpdated = await Account.findByIdAndUpdate(accountOrigin._id,{ balance: newBalance }, {new: true})
 
