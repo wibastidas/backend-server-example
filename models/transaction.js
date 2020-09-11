@@ -36,7 +36,7 @@ const TransactionSchema = Schema({
     },
 
     created_at: {
-        type: Number,
+        type: Date,
         required: false
     },
 
@@ -59,9 +59,9 @@ const TransactionSchema = Schema({
 });
 
 TransactionSchema.method('toJSON', function() {
-    const { __v, _id, created_at, ...object } = this.toObject();
+    const { __v, _id, ...object } = this.toObject();
     object.id = _id;
-    object.created_at = moment.unix(created_at).format("MM-DD-YYYY");
+    //object.created_at = moment.unix(created_at).format("MM-DD-YYYY");
     return object;
 });
 
