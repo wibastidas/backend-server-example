@@ -87,6 +87,7 @@ const createTrasaction = async(req, res = response) => {
             });
         }
 
+        console.log('transferFee', transferFee);
         // descontar el monto de la cuenta origen y sumarlo a la cuenta destino
         let newBalanceOrigin = accountOrigin.balance - (parseFloat(amount) + parseFloat(transferFee)) ;
         let newBalanceDest = accountDest.balance + parseFloat(amountToTransfer);
@@ -101,6 +102,8 @@ const createTrasaction = async(req, res = response) => {
         //crear la transaccion
         const transaction = new Transaction({accountFrom, accountTo, amount: parseFloat(amountToTransfer), description});
         transaction.created_at = moment().unix();
+        //transaction.created_at = moment().add(1, 'day').unix();
+
         //const date = moment().unix();
         //console.log('calendar:',  moment.unix(date).format("MMDDYYYY"));
 

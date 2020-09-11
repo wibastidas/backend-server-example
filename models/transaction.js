@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const moment = require('moment');
 
 const TransactionSchema = Schema({
 
@@ -45,8 +46,9 @@ const TransactionSchema = Schema({
 });
 
 TransactionSchema.method('toJSON', function() {
-    const { __v, _id, ...object } = this.toObject();
+    const { __v, _id, created_at, ...object } = this.toObject();
     object.id = _id;
+    object.created_at = moment.unix(created_at).format("MM-DD-YYYY");
     return object;
 });
 
