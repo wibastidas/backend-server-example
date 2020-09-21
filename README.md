@@ -9,12 +9,7 @@ Administrador de paquetes
 Mongo Compass  (Opcional)  
 ```
 https://www.mongodb.com/try/download/compass    
-```  
-
-Cadena de conexion Mongo Compass   
 ```   
-mongodb+srv://mean_user:21uwU4djunPWP4ds@cluster0.bbdzs.mongodb.net/bankdb   
-```    
 
 Instalar dependencias
 ```
@@ -73,7 +68,6 @@ La alternativa fue utilizar el enpoint disponible en la versión gratuita que no
 
 
 ### Mejoras
-Por limitaciones de tiempo las siguientes features no fueron implementadas:
 Paginar resultado de busqueda para el enpoint GET transactions.
 Validar que no exista el email del usuario que se esta registrando en la base de datos. 
 Permiter hacer CRUD de users, account, currency...
